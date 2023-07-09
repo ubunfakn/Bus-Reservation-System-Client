@@ -18,6 +18,8 @@ export default function ForgotPassword() {
 
   const getOtp = ()=>{
     if(handleValidation()){
+      toast.loading("Please wait.........",toastOptions)
+      // toast.warn("loading....")
       fetch('http://localhost:8080/auth/forgot',{
         method:'POST',
         headers:{
@@ -29,6 +31,9 @@ export default function ForgotPassword() {
           resolve.json().then((result)=>{
             if(resolve.status === 200){
               toast.success(result.message, toastOptions);
+              setTimeout(()=>{
+                toast.dismiss();
+              },1000);
             }else{
               toast.error(result.message, toastOptions);
             }
@@ -62,27 +67,25 @@ export default function ForgotPassword() {
         body: JSON.stringify({otp})
       }).then((resolve)=>{
         resolve.json().then((result)=>{
-          console.log(result);
           if(resolve.status === 200){
-            Navigate("/change");
+            Navigate("/change",{state: email});
           }else{
             toast.error(result.message, toastOptions);
           }
         }).catch((error)=>{
-          toast.error(error + " Something went wrong from our end!! Please try again after sometime");
+          toast.error(error + " Something went wrong from our end!! Please try again after sometime", toastOptions);
         })
       }).catch((error)=>{
-        toast.error(error + " Something went wrong from our end!! Please try again after sometime");
+        toast.error(error + " Something went wrong from our end!! Please try again after sometime" ,toastOptions);
       })
     }
   }
   return (
-    <div className="container mt-5">
-      <div className="row">
-        <div className="col-md-6 offset-md-3">
+    <div>
+        <div className="col-md-4 offset-md-1">
           <div
-            className="card text-white mb-5 mt-4"
-            style={{ opacity: "0.9", backgroundColor: "#175a7a" }}
+            className="card text-white mb-5"
+            style={{marginTop: '17%'}}
           >
             <div className="card-title mt-3">
               <i className="fa fa-lock fa-4x"></i>
@@ -103,7 +106,7 @@ export default function ForgotPassword() {
                     aria-describedby="emailHelp"
                     placeholder="Enter email"
                   />
-                  <Link className="text-white mt-1 font-weight-bold d-flex" onClick={getOtp} style={{fontSize:'130%'}}>Get Otp</Link>
+                  <Link className="mt-1 font-weight-bold d-flex" onClick={getOtp}>Get Otp</Link>
                 </div>
                 <div className="form-group">
                   <label className="d-flex" htmlFor="otp">
@@ -123,7 +126,6 @@ export default function ForgotPassword() {
             </div>
           </div>
         </div>
-      </div>
       <ToastContainer />
     </div>
   );

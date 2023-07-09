@@ -29,14 +29,14 @@ export default function CancelTicket() {
           resolve.json().then((result)=>{
             console.log(result);
           }).catch((error)=>{
-            toast.error(error + " Please Try again later!..");
+            toast.error(error + " Please Try again later!..", toastOptions);
           })
         }else{
           console.log(resolve);
           toast.error(resolve.body,toastOptions);
         }
       }).catch((error)=>{
-        toast.error(error + " Please Try again later!..");
+        toast.error(error + " Please Try again later!..", toastOptions);
       })
     }
   }
@@ -56,8 +56,8 @@ export default function CancelTicket() {
   }
   return (
     <div>
-      <div className="col-md-4 offset-md-4">
-        <div className="card mb-5 text-white" style={{ marginTop: "19%", opacity:'0.9', backgroundColor:'#175a7a' }}>
+      <div className="col-md-4 offset-md-1">
+        <div className="card mb-5 text-white">
           <div className="card-title mt-4">
             <h1 className="font-weight-bold">Cancel Booking</h1>
           </div>

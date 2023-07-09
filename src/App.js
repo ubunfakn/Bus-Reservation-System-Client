@@ -14,7 +14,7 @@ import Faq from "./Components/Faq";
 import Features from "./Components/Features";
 import Feedback from "./Components/Feedback";
 import ChangePassword from "./Components/ChangePassword";
-import TopRoutes from "./Components/TopRoutes";
+import Disclaimer from "./Components/Disclaimer";
 import ETicketTandC from './Components/ETicketTandC';
 import ForgotPassword from './Components/ForgotPassword';
 import PageNotFound from "./Components/PageNotFound";
@@ -33,7 +33,7 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/about" element={<About />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
-          <Route path="/t_routes" element={<TopRoutes />} />
+          <Route path="/disclaimer" element={<Disclaimer />} />
           <Route path="/failed" element={<FailedTransactions />} />
           <Route path="/faqs" element={<Faq />} />
           <Route path="/features" element={<Features />} />

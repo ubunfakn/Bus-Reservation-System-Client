@@ -1,10 +1,14 @@
-.App {
+@import url('https://fonts.googleapis.com/css2?family=Kanit&family=Libre+Baskerville:ital@0;1&family=Poppins:ital@1&family=Roboto+Condensed:ital@1&family=Roboto+Slab:wght@300&family=Roboto:ital@1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Kanit:ital@0;1&family=Libre+Baskerville:ital@0;1&family=Poppins:ital@1&family=Roboto+Condensed:ital@1&family=Roboto+Slab:wght@300&family=Roboto:ital@1&display=swap');
+.App{
   text-align: center;
+  font-family: 'Kanit', sans-serif;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-image: url("./Components//utils//van-and-bus-mockup.jpg");
-  height: 110vh;
+  background-image:linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("./Components//utils//volvo-9600.avif");
+  height: 100%;
+  background-attachment: fixed;
   background-size: 100% 100%;
   background-repeat: no-repeat;
 }
@@ -49,3 +53,31 @@
   bottom: 0;
   background-color: black;
 }
+
+.card{
+  background-color: #ececee;
+  border-radius: 18px;
+  color: black!important;
+  float: left;
+  width: 100%;
+  margin-bottom: 15%!important;
+  margin-top: 15%!important;
+}
+
+.navbar-brand{
+  font-family: 'Bebas Neue', sans-serif;
+}
+
+.about-text{
+  color: grey;
+  font-size: 1.2rem;
+  display: flex;
+  text-align: justify;
+}
+
+.footer-link-card{
+  margin-top: 3%!important;
+  margin-bottom: 3%!important;
+}
+
+

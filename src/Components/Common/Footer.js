@@ -84,8 +84,8 @@ export default function Footer() {
               <div className="col-lg-3 col-md-6 mb-4 mb-md-0">
                 <ul className="list-unstyled mb-0">
                   <li>
-                    <Link to={"/t_routes"} className="text-white">
-                      Top Routes
+                    <Link to={"/disclaimer"} className="text-white">
+                      Disclaimer
                     </Link>
                   </li>
                   <li>

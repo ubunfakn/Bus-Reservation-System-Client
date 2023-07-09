@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import validator from "validator";
 
 export default function SignUp() {
   //Declarations
@@ -11,25 +14,20 @@ export default function SignUp() {
   const [state, setState] = useState("");
   const [country, setCountry] = useState("India");
   const [checkbox, setCheckBox] = useState(false);
-  const [error, setError] = useState(false);
-  const [apiError, setApiError] = useState(null);
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 6500,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
   const Navigate = useNavigate("");
   //Declarations
 
   //Functions
-  const getData = async (e) => {
+  const getData = (e) => {
     e.preventDefault();
-    if (
-      !name ||
-      !email ||
-      !password ||
-      !address ||
-      !mobile ||
-      !state ||
-      !country ||
-      !checkbox
-    ) {
-      setError(true);
+    if (handleValidation()) {
     } else {
       const data = {
         name,
@@ -40,27 +38,66 @@ export default function SignUp() {
         state,
         country,
       };
-      let result = await fetch("http://localhost:8080/auth/save", {
+      fetch("http://localhost:8080/auth/save", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
+      }).then((resolve) => {
+        resolve.json().then((resultJson) => {
+          if (resolve.status === 200) {
+            console.log(resultJson);
+            localStorage.setItem("bus-reservation-system-user", resultJson);
+            localStorage.setItem(
+              "bus-reservation-system-token",
+              resultJson.token
+            );
+            if (resultJson.role === "ROLE_ADMIN") Navigate("/admin");
+            else if (resultJson.role === "ROLE_USER") Navigate("/user");
+          } else {
+            toast.error(resultJson.message, toastOptions);
+          }
+        }).catch((error)=>{
+          toast.error(error + " Please try again later...", toastOptions);
+        });
+      }).catch((error)=>{
+        toast.error(error + " Please try again later...", toastOptions);
       });
+    }
+  };
 
-      if (result.status === 200) {
-        let resultJson = await result.json();
-        console.log(resultJson);
-        localStorage.setItem("bus-reservation-system-user", resultJson);
-        localStorage.setItem("bus-reservation-system-token", resultJson.token);
-        if (resultJson.role === "ROLE_ADMIN") Navigate("/admin");
-        else if (resultJson.role === "ROLE_USER") Navigate("/user");
-      } else {
-        setApiError(
-          "Something went wrong from our end!! Please try again after sometime"
-        );
-      }
+  const handleValidation = () => {
+    if (
+      name === "" ||
+      email === "" ||
+      password === "" ||
+      mobile === "" ||
+      address === "" ||
+      state === "" ||
+      country === "" ||
+      checkbox === false
+    ) {
+      toast.error("Fields cannot be empty", toastOptions);
+      return false;
+    } else if (!validator.isEmail(email)) {
+      toast.error("Please enter correct email", toastOptions);
+      return false;
+    } else if (password.length < 8) {
+      toast.error(
+        "Password must contain at least eight characters",
+        toastOptions
+      );
+      return false;
+    } else if (!validator.isNumeric(mobile)) {
+      toast.error(
+        "Mobile number should only consist of numbers.",
+        toastOptions
+      );
+      return false;
+    } else {
+      return true;
     }
   };
 
@@ -77,155 +114,117 @@ export default function SignUp() {
   }, []);
 
   return (
-    <div
-      style={{
-        backgroundImage:
-          "url(" + require("./utils/van-and-bus-mockup.jpg") + ")",
-        height: "150vh",
-        backgroundRepeat: "no-repeat",
-        backgroundSize: "100% 100%",
-      }}
-    >
-      <div className="col-md-4 offset-md-4">
-        <div
-          className="card mb-4 mt-4 text-white"
-          style={{ opacity: "0.9", backgroundColor: "#175a7a" }}
-        >
-          {apiError ? (
-            <div className="alert alert-danger" role="alert">
-              <h5>{apiError}</h5>
-            </div>
-          ) : (
-            <div className="container"></div>
-          )}
+    <div>
+      <div className="col-md-4 offset-md-1">
+        <div className="card mb-4 mt-4 text-white">
           <div className="card-title mt-3">
             <i className="fa fa-user-plus fa-4x mb-1"></i>
             <h1>Sign-up</h1>
           </div>
           <div className="card-body">
             <form onSubmit={getData}>
-              {/* Name Field  */}
-              <div className="form-group">
-                <label className="d-flex" htmlFor="name">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="form-control"
-                  id="name"
-                  aria-describedby="emailHelp"
-                  placeholder="Enter Your Full name"
-                />
-                {error && !name ? (
-                  <span className="d-flex text-warning">
-                    Please Enter Valid Name
-                  </span>
-                ) : null}
-              </div>
-              {/* Name Field  */}
+              <div className="row">
+                {/* Name Field  */}
+                <div className="col">
+                  <label className="d-flex" htmlFor="name">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    className="form-control"
+                    id="name"
+                    aria-describedby="emailHelp"
+                    placeholder="Enter Your Full name"
+                  />
+                </div>
+                {/* Name Field  */}
 
-              {/* Email Field  */}
-              <div className="form-group">
-                <label className="d-flex" htmlFor="email">
-                  Email address
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="form-control"
-                  id="email"
-                  aria-describedby="emailHelp"
-                  placeholder="Enter email"
-                />
+                {/* Email Field  */}
+                <div className="col">
+                  <label className="d-flex" htmlFor="email">
+                    Email address
+                  </label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="form-control"
+                    id="email"
+                    aria-describedby="emailHelp"
+                    placeholder="Enter email"
+                  />
+                </div>
+                {/* Email Field  */}
               </div>
-              {/* Email Field  */}
 
-              {/* Password Field  */}
-              <div className="form-group">
-                <label className="d-flex" htmlFor="password">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="form-control"
-                  id="password"
-                  placeholder="Enter Strong Password"
-                />
-                {error && !password ? (
-                  <span className="d-flex text-warning">
-                    Please Enter Valid Password
-                  </span>
-                ) : null}
-              </div>
-              {/* Password Field  */}
+              <div className="row">
+                {/* Password Field  */}
+                <div className="col">
+                  <label className="d-flex" htmlFor="password">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="form-control"
+                    id="password"
+                    placeholder="Enter Strong Password"
+                  />
+                </div>
+                {/* Password Field  */}
 
-              {/* Mobile No. */}
-              <div className="form-group">
-                <label className="d-flex" htmlFor="mobile">
-                  Mobile
-                </label>
-                <input
-                  type="text"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
-                  className="form-control"
-                  id="mobile"
-                  placeholder="Enter Mobile No."
-                />
-                {error && !mobile ? (
-                  <span className="d-flex text-warning">
-                    Please Enter Valid Mobile No.
-                  </span>
-                ) : null}
+                {/* Mobile Field  */}
+                <div className="col">
+                  <label className="d-flex" htmlFor="mobile">
+                    Mobile
+                  </label>
+                  <input
+                    type="text"
+                    value={mobile}
+                    onChange={(e) => setMobile(e.target.value)}
+                    className="form-control"
+                    id="mobile"
+                    placeholder="Enter Mobile No."
+                  />
+                </div>
               </div>
-              {/* Mobile No. */}
 
-              {/* Address  */}
-              <div className="form-group">
-                <label className="d-flex" htmlFor="address">
-                  Address
-                </label>
-                <input
-                  type="text"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  className="form-control"
-                  id="address"
-                  placeholder="Enter Complete Address"
-                />
-                {error && !address ? (
-                  <span className="d-flex text-warning">
-                    Please Enter Valid Address
-                  </span>
-                ) : null}
-              </div>
-              {/* Address  */}
+              <div className="row">
+                {/* Address  */}
+                <div className="col">
+                  <label className="d-flex" htmlFor="address">
+                    Address
+                  </label>
+                  <input
+                    type="text"
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                    className="form-control"
+                    id="address"
+                    placeholder="Enter Complete Address"
+                  />
+                </div>
+                {/* Address  */}
 
-              {/* State  */}
-              <div className="form-group">
-                <label className="d-flex" htmlFor="state">
-                  State
-                </label>
-                <input
-                  type="text"
-                  value={state}
-                  onChange={(e) => setState(e.target.value)}
-                  className="form-control"
-                  id="state"
-                  placeholder="Enter State"
-                />
-                {error && !state ? (
-                  <span className="d-flex text-warning">
-                    Please Enter Valid State
-                  </span>
-                ) : null}
+                {/* State  */}
+                <div className="col">
+                  <label className="d-flex" htmlFor="state">
+                    State
+                  </label>
+                  <input
+                    type="text"
+                    value={state}
+                    onChange={(e) => setState(e.target.value)}
+                    className="form-control"
+                    id="state"
+                    placeholder="Enter State"
+                  />
+                </div>
+                {/* State  */}
               </div>
-              {/* State  */}
 
               {/* Country  */}
               <div className="form-group">
@@ -240,11 +239,6 @@ export default function SignUp() {
                   id="country"
                   placeholder="Enter Country"
                 />
-                {error && !country ? (
-                  <span className="d-flex text-warning">
-                    Please Enter Valid Country
-                  </span>
-                ) : null}
               </div>
               {/* Country  */}
 
@@ -254,16 +248,11 @@ export default function SignUp() {
                   type="checkbox"
                   className="form-check-input d-flex"
                   id="check-box"
-                  onChange={(e) => setCheckBox(!checkbox)}
+                  onChange={() => setCheckBox(!checkbox)}
                 />
                 <label className="form-check-label d-flex" htmlFor="check-box">
                   Agree to Terms & Conditions
                 </label>
-                {error && !checkbox ? (
-                  <span className="d-flex text-warning">
-                    Please agree to terms and conditions
-                  </span>
-                ) : null}
               </div>
               {/* Check-Box  */}
 
@@ -272,6 +261,7 @@ export default function SignUp() {
               </button>
             </form>
           </div>
+          <ToastContainer />
         </div>
       </div>
     </div>

@@ -48,17 +48,20 @@ export default function Reservation() {
         body: JSON.stringify(data),
       })
         .then((resolve) => {
-          resolve.json().then((result)=>{
-            setBuses(result);
-          }).catch((error)=>{
-            console.log(error);
-          })
+          resolve
+            .json()
+            .then((result) => {
+              setBuses(result);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
         })
         .catch((error) => {
           console.log(error);
         });
+        Navigate("/buses", { state: buses });
     }
-    Navigate("/buses", {state: buses});
   };
 
   const handleValidation = () => {
@@ -78,15 +81,8 @@ export default function Reservation() {
 
   return (
     <div>
-      <div className="col-md-4 offset-md-4">
-        <div
-          className="card mb-5 text-white"
-          style={{
-            marginTop: "17%",
-            opacity: "0.9",
-            backgroundColor: "#175a7a",
-          }}
-        >
+      <div className="col-md-4 offset-md-1">
+        <div className="card mb-5 text-white">
           <div className="card-title mt-2">
             <h1 className="font-weight-bold">Search Buses</h1>
           </div>
@@ -136,8 +132,8 @@ export default function Reservation() {
                   className="form-control"
                 />
               </div>
-              <button className="btn btn-lg btn-danger mt-3" type="submit">
-                Proceed to Cancel
+              <button className="btn btn-lg btn-success mt-3" type="submit">
+                Search
               </button>
             </form>
           </div>
