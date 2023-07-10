@@ -39,7 +39,7 @@ export default function Reservation() {
     const data = { date, origin, destinantion };
     if (handleValidation()) {
       //fetch data from api and display it on the screen using react components
-      fetch(``, {
+      fetch(`http://localhost:8080/getBuses`, {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -51,16 +51,20 @@ export default function Reservation() {
           resolve
             .json()
             .then((result) => {
-              setBuses(result);
+              if(result.status===200){
+                setBuses(result.buses);
+                Navigate("/searchbuses", { state: {statusOfSearch:true,buses,origin,destinantion, date} });
+              }else{
+                Navigate("/searchbuses", {state: {statusOfSearch:false}, origin,destinantion, date});
+              }
             })
             .catch((error) => {
-              console.log(error);
+              toast.error("Please try later", toastOptions);
             });
         })
         .catch((error) => {
-          console.log(error);
+          toast.error("Please try later", toastOptions);
         });
-        Navigate("/buses", { state: buses });
     }
   };
 
@@ -68,7 +72,7 @@ export default function Reservation() {
     if (!validator.isDate(date)) {
       toast.error("Please enter Date in dd/mm/yyyy format", toastOptions);
       return false;
-    } else if (origin === "") {
+    }else if (origin === "") {
       toast.error("Please Enter Origin", toastOptions);
       return false;
     } else if (destinantion === "") {

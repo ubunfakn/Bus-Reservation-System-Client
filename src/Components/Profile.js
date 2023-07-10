@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import validator from "validator";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Profile() {
   const [readOnly, setReadOnly] = useState(true);
@@ -62,36 +63,52 @@ export default function Profile() {
       });
   };
 
-  const getData = ()=>{
-    if(handleValidation()){
+  const getData = () => {
+    if (handleValidation()) {
       setReadOnly(true);
-      const data = {userId, name, email, mobile, role, address, state, country};
-      fetch(`http://localhost:8080/api/editprofile`,{
-        method:'POST',
-        headers:{
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          Authorization:`Bearer ${localStorage.getItem('bus-reservation-system-token')}`
+      const data = {
+        userId,
+        name,
+        email,
+        mobile,
+        role,
+        address,
+        state,
+        country,
+      };
+      fetch(`http://localhost:8080/api/editprofile`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem(
+            "bus-reservation-system-token"
+          )}`,
         },
-        body:JSON.stringify(data)
-      }).then((resolve)=>{
-        resolve.json().then((result)=>{
-          if(result.status === 200){
-            fetchUser();
-            toast.done("Profile updated successfully", toastOptions);
-          }else{
-            toast.error(result.message, toastOptions);
-          }
-        }).catch((error)=>{
+        body: JSON.stringify(data),
+      })
+        .then((resolve) => {
+          resolve
+            .json()
+            .then((result) => {
+              if (result.status === 200) {
+                fetchUser();
+                toast.done("Profile updated successfully", toastOptions);
+              } else {
+                toast.error(result.message, toastOptions);
+              }
+            })
+            .catch((error) => {
+              toast.error(error, toastOptions);
+            });
+        })
+        .catch((error) => {
           toast.error(error, toastOptions);
         });
-      }).catch((error)=>{
-        toast.error(error, toastOptions);
-      });
     }
-  }
+  };
 
-  const handleValidation = ()=>{
+  const handleValidation = () => {
     if (
       name === "" ||
       email === "" ||
@@ -105,7 +122,7 @@ export default function Profile() {
     } else if (!validator.isEmail(email)) {
       toast.error("Please enter correct email", toastOptions);
       return false;
-    }else if (!validator.isNumeric(mobile)) {
+    } else if (!validator.isNumeric(mobile)) {
       toast.error(
         "Mobile number should only consist of numbers.",
         toastOptions
@@ -114,7 +131,7 @@ export default function Profile() {
     } else {
       return true;
     }
-  }
+  };
 
   // eslint-disable-next-line
   useEffect(() => {
@@ -131,7 +148,7 @@ export default function Profile() {
         </div>
         <div className="card-body">
           <div className="table-responsive">
-            <table class="table table-dark">
+            <table className="table table-dark">
               <thead>
                 <tr></tr>
               </thead>
@@ -143,9 +160,7 @@ export default function Profile() {
                   <td></td>
                   <td></td>
                   <td>
-                    <h3>
-                      {userId}
-                    </h3>
+                    <h3>{userId}</h3>
                   </td>
                 </tr>
                 <tr>
@@ -177,7 +192,7 @@ export default function Profile() {
                       <input
                         type="text"
                         value={email}
-                        onChange={(e)=>setEmail(e.target.value)}
+                        onChange={(e) => setEmail(e.target.value)}
                         readOnly={readOnly}
                         className="bg-dark text-white"
                       />
@@ -274,15 +289,30 @@ export default function Profile() {
           </div>
 
           <div className="d-d-inline-flex profile-button">
-            {readOnly===true?<button onClick={()=>setReadOnly(false)} className="btn btn-lg btn-warning mt-3">
-              Edit Profile
-            </button>:null}
-            {readOnly===true?<button onClick={()=>Navigate("/change")} className="btn btn-lg btn-danger ml-3 mt-3">
-              Change Password
-            </button>:null}
-            {readOnly===false?<button onClick={getData} className="btn btn-lg btn-success ml-3 mt-3">
-              Save Changes
-            </button>:null}
+            {readOnly === true ? (
+              <button
+                onClick={() => setReadOnly(false)}
+                className="btn btn-lg btn-warning mt-3"
+              >
+                Edit Profile
+              </button>
+            ) : null}
+            {readOnly === true ? (
+              <button
+                onClick={() => Navigate("/change", { state: email })}
+                className="btn btn-lg btn-danger ml-3 mt-3"
+              >
+                Change Password
+              </button>
+            ) : null}
+            {readOnly === false ? (
+              <button
+                onClick={getData}
+                className="btn btn-lg btn-success ml-3 mt-3"
+              >
+                Save Changes
+              </button>
+            ) : null}
           </div>
         </div>
       </div>

@@ -122,6 +122,7 @@ export default function ADD_ROUTE() {
                     value={pickUpPoint}
                     onChange={(e) => setPickUpPoint(e.target.value)}
                     className="form-control"
+                    placeholder="Enter Pickup point"
                   />
                 </div>
                 {/* Pickup-Point  */}
@@ -156,6 +157,7 @@ export default function ADD_ROUTE() {
                     value={dropOffPoint}
                     onChange={(e) => setDropOffPoint(e.target.value)}
                     className="form-control"
+                    placeholder="Enter Dropoff point"
                   />
                 </div>
                 {/* Dropoff-Point  */}

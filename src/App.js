@@ -22,6 +22,12 @@ import { useEffect, useState } from "react";
 import ADD_BUS from "./Components/ADD_BUS";
 import ADD_ROUTE from "./Components/ADD_ROUTE";
 import Profile from "./Components/Profile";
+import Bookings from "./Components/Bookings";
+import AllRoutes from './Components/AllRoutes';
+import Buses from "./Components/Buses";
+import Users from "./Components/Users";
+import Customers from './Components/Customers';
+import SearchBus from "./Components/SearchBus";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -66,6 +72,7 @@ function App() {
           <Route path="/e_tandc" element={<ETicketTandC />} />
           <Route path="/forgot" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
+          <Route path="/searchbuses" element={<SearchBus />} />
         </Routes>
         {isAdmin === true ? (
           <Routes>
@@ -73,6 +80,11 @@ function App() {
             <Route path="/addbus" element={<ADD_BUS />} />
             <Route path="/addroute" element={<ADD_ROUTE />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/bookings" element={<Bookings />} />
+            <Route path="/routes" element={<AllRoutes />} />
+            <Route path="/buses" element={<Buses />} />
+            <Route path="/users" element={<Users />} />
+            <Route path="/customers" element={<Customers />} />
           </Routes>
         ) : null}
         {isUser === true?(

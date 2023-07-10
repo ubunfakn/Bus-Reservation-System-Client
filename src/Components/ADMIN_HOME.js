@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function ADMIN_HOME() {
+  const Navigate = useNavigate("");
   return (
     <div className="col-md-10 offset-md-1">
       <div className="card">
@@ -15,7 +17,10 @@ export default function ADMIN_HOME() {
                 <div className="card-body">
                   <i className="fa-solid fa-users fa-6x"></i>
                   <h2 className="text-center mt-4">4</h2>
-                  <button className="btn btn-warning btn-block">
+                  <button
+                    onClick={() => Navigate("/customers")}
+                    className="btn btn-warning btn-block"
+                  >
                     Customers
                   </button>
                 </div>
@@ -26,7 +31,10 @@ export default function ADMIN_HOME() {
                 <div className="card-body">
                   <i className="fa-solid fa-ticket fa-6x"></i>
                   <h2 className="text-center mt-4">8</h2>
-                  <button className="btn btn-warning btn-block text-white">
+                  <button
+                    onClick={() => Navigate("/bookings")}
+                    className="btn btn-warning btn-block text-white"
+                  >
                     Bookings
                   </button>
                 </div>
@@ -37,7 +45,12 @@ export default function ADMIN_HOME() {
                 <div className="card-body">
                   <i className="fa-solid fa-bus fa-6x"></i>
                   <h2 className="text-center mt-4">2</h2>
-                  <button className="btn btn-warning btn-block">Buses</button>
+                  <button
+                    onClick={() => Navigate("/buses")}
+                    className="btn btn-warning btn-block"
+                  >
+                    Buses
+                  </button>
                 </div>
               </div>
             </div>
@@ -46,7 +59,12 @@ export default function ADMIN_HOME() {
                 <div className="card-body">
                   <i className="fa-solid fa-road fa-6x"></i>
                   <h2 className="text-center mt-4">2</h2>
-                  <button className="btn btn-warning btn-block">Routes</button>
+                  <button
+                    onClick={() => Navigate("/routes")}
+                    className="btn btn-warning btn-block"
+                  >
+                    Routes
+                  </button>
                 </div>
               </div>
             </div>
@@ -57,7 +75,10 @@ export default function ADMIN_HOME() {
                 <div className="card-body">
                   <i className="fa-solid fa-money-bill fa-6x"></i>
                   <h2 className="text-center mt-4">19</h2>
-                  <button className="btn btn-warning btn-block">
+                  <button
+                    onClick={() => Navigate("/transactions")}
+                    className="btn btn-warning btn-block"
+                  >
                     Transactions
                   </button>
                 </div>
@@ -68,7 +89,12 @@ export default function ADMIN_HOME() {
                 <div className="card-body">
                   <i className="fa-solid fa-users-viewfinder fa-6x"></i>
                   <h2 className="text-center mt-4">2</h2>
-                  <button className="btn btn-warning btn-block">Users</button>
+                  <button
+                    onClick={() => Navigate("/users")}
+                    className="btn btn-warning btn-block"
+                  >
+                    Users
+                  </button>
                 </div>
               </div>
             </div>
@@ -77,7 +103,10 @@ export default function ADMIN_HOME() {
                 <div className="card-body">
                   <i className="fa-sharp fa-solid fa-bus fa-6x"></i>
                   <i className="fa-light fa-plus fa-6x"></i>
-                  <button className="btn btn-success btn-block mt-4">
+                  <button
+                    onClick={() => Navigate("/addbus")}
+                    className="btn btn-success btn-block mt-4"
+                  >
                     Add Bus
                   </button>
                 </div>
@@ -88,78 +117,11 @@ export default function ADMIN_HOME() {
                 <div className="card-body">
                   <i className="fa-sharp fa-solid fa-route fa-6x"></i>
                   <i className="fa-light fa-plus fa-6x"></i>
-                  <button className="btn btn-success btn-block mt-4">
+                  <button
+                    onClick={() => Navigate("/addroute")}
+                    className="btn btn-success btn-block mt-4"
+                  >
                     Add Route
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-3">
-              <div className="card inside-card">
-                <div className="card-body">
-                  <i className="fa-sharp fa-solid fa-bus fa-6x"></i>
-                  <i className="fa-solid fa-pen-nib fa-3x"></i>
-                  <button className="btn btn-block btn-primary mt-5">
-                    Update Bus Details
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="card inside-card">
-                <div className="card-body">
-                  <i className="fa-sharp fa-solid fa-route fa-6x"></i>
-                  <i className="fa-solid fa-pen-nib fa-3x"></i>
-                  <button className="btn btn-block btn-primary mt-5">
-                    Update Route Details
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="card inside-card">
-                <div className="card-body">
-                  <i className="fa-sharp fa-solid fa-bus fa-6x"></i>
-                  <i className="fa-solid fa-xmark fa-5x"></i>
-                  <button className="btn btn-block btn-danger mt-5">
-                    Delete Bus
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="card inside-card">
-                <div className="card-body">
-                  <i className="fa-sharp fa-solid fa-route fa-6x"></i>
-                  <i className="fa-solid fa-xmark fa-5x"></i>
-                  <button className="btn btn-block btn-danger mt-5">
-                    Delete Route
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-md-3">
-              <div className="card inside-card">
-                <div className="card-body">
-                  <i className="fa-solid fa-money-bill fa-6x"></i>
-                  <i className="fa-solid fa-xmark fa-5x"></i>
-                  <button className="btn btn-block btn-danger mt-5">
-                    Delete Transaction
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="card inside-card">
-                <div className="card-body">
-                  <i className="fa-solid fa-users fa-6x"></i>
-                  <i className="fa-solid fa-xmark fa-5x"></i>
-                  <button className="btn btn-block btn-danger mt-5">
-                    Remove Customer
                   </button>
                 </div>
               </div>

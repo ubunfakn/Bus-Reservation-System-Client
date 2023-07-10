@@ -86,7 +86,7 @@ export default function Login() {
         Navigate("/user");
     }
     // eslint-disable-next-line
-  }, []);
+  },[]);
   //Functions
 
   return (
