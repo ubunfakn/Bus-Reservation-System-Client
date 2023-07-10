@@ -15,12 +15,37 @@ import Features from "./Components/Features";
 import Feedback from "./Components/Feedback";
 import ChangePassword from "./Components/ChangePassword";
 import Disclaimer from "./Components/Disclaimer";
-import ETicketTandC from './Components/ETicketTandC';
-import ForgotPassword from './Components/ForgotPassword';
-import PageNotFound from "./Components/PageNotFound";
-
+import ETicketTandC from "./Components/ETicketTandC";
+import ForgotPassword from "./Components/ForgotPassword";
+import ADMIN_HOME from "./Components/ADMIN_HOME";
+import { useEffect, useState } from "react";
+import ADD_BUS from "./Components/ADD_BUS";
+import ADD_ROUTE from "./Components/ADD_ROUTE";
+import Profile from "./Components/Profile";
 
 function App() {
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isUser, setIsUser] = useState(false);
+
+  // eslint-disable-next-line
+  useEffect(() => {
+    if (!localStorage.getItem("bus-reservation-system-token")) {
+      setIsAdmin(false);
+      setIsUser(false);
+    } else {
+      if (
+        localStorage.getItem("bus-reservation-system-role") === "ROLE_ADMIN"
+      ) {
+        setIsAdmin(true);
+        setIsUser(false);
+      } else if (
+        localStorage.getItem("bus-reservation-system-role" === "ROLE_USER")
+      ) {
+        setIsAdmin(false);
+        setIsUser(true);
+      }
+    }
+  });
   return (
     <div className="App">
       <BrowserRouter>
@@ -41,8 +66,20 @@ function App() {
           <Route path="/e_tandc" element={<ETicketTandC />} />
           <Route path="/forgot" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
-          <Route path="/*" element={<PageNotFound />} />
         </Routes>
+        {isAdmin === true ? (
+          <Routes>
+            <Route path="/admin" element={<ADMIN_HOME />} />
+            <Route path="/addbus" element={<ADD_BUS />} />
+            <Route path="/addroute" element={<ADD_ROUTE />} />
+            <Route path="/profile" element={<Profile />} />
+          </Routes>
+        ) : null}
+        {isUser === true?(
+          <Routes>
+            <Route path="/user"/>
+          </Routes>
+        ):null}
         <Footer />
       </BrowserRouter>
     </div>

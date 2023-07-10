@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 
 export default function Navigationbar() {
   const [show, setShow] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
   const Navigate = useNavigate("");
 
   const logout = () => {
@@ -20,14 +21,17 @@ export default function Navigationbar() {
     } else {
       setShow(true);
     }
+
+    if (localStorage.getItem("bus-reservation-system-role") === "ROLE_ADMIN") {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
   });
   return (
-    <nav
-      className="navbar navbar-expand-lg navbar-dark nav-pills"
-      style={{ backgroundColor: "" }}
-    >
-      <NavLink className="navbar-brand container" to={""}>
-        <h1 >
+    <nav className="navbar navbar-expand-lg navbar-dark nav-pills">
+      <NavLink className="navbar-brand ml-5" to={""}>
+        <h1 className="ml-5">
           <i className="fa fa-bus-alt fa-2x"></i>CHALO<em> Yatri</em>
           <br />
         </h1>
@@ -44,21 +48,39 @@ export default function Navigationbar() {
         <span className="navbar-toggler-icon"></span>
       </button>
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul className="navbar-nav text-center text-center" style={{fontSize:'25px'}}>
+        <ul className="navbar-nav ml-auto" style={{ fontSize: "22px" }}>
           <li className="nav-item ml-3">
-            <NavLink className="nav-link" to={"/"}>
-              Reservation
-            </NavLink>
+            {isAdmin === false ? (
+              <NavLink className="nav-link" to={"/"}>
+                Reservation
+              </NavLink>
+            ) : (
+              <NavLink className="nav-link" to={"/admin"}>
+                Home
+              </NavLink>
+            )}
           </li>
           <li className="nav-item ml-3">
-            <NavLink className="nav-link" to={"/view"}>
-              View Ticket
-            </NavLink>
+            {isAdmin === false ? (
+              <NavLink className="nav-link" to={"/view"}>
+                View Ticket
+              </NavLink>
+            ) : (
+              <NavLink className="nav-link" to={"/addbus"}>
+                Add-Bus
+              </NavLink>
+            )}
           </li>
           <li className="nav-item ml-3">
-            <NavLink className="nav-link" to={"/cancel"}>
-              Cancellation
-            </NavLink>
+            {isAdmin === false ? (
+              <NavLink className="nav-link" to={"/cancel"}>
+                Cancellation
+              </NavLink>
+            ) : (
+              <NavLink className="nav-link" to={"/addroute"}>
+                Add-Route
+              </NavLink>
+            )}
           </li>
           <li className="nav-item ml-3">
             {show === true ? (

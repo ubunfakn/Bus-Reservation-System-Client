@@ -60,9 +60,10 @@
   color: black!important;
   float: left;
   width: 100%;
-  margin-bottom: 15%!important;
-  margin-top: 15%!important;
+  margin-bottom: 8rem!important;
+  margin-top: 3rem!important;
 }
+
 
 .navbar-brand{
   font-family: 'Bebas Neue', sans-serif;
@@ -79,5 +80,12 @@
   margin-top: 3%!important;
   margin-bottom: 3%!important;
 }
+
+.inside-card{
+  background-color: white;
+  margin-top: -5rem!important;
+}
+
+
 
 

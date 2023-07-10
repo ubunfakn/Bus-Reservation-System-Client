@@ -28,7 +28,6 @@ export default function SignUp() {
   const getData = (e) => {
     e.preventDefault();
     if (handleValidation()) {
-    } else {
       const data = {
         name,
         email,
@@ -45,26 +44,31 @@ export default function SignUp() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data),
-      }).then((resolve) => {
-        resolve.json().then((resultJson) => {
-          if (resolve.status === 200) {
-            console.log(resultJson);
-            localStorage.setItem("bus-reservation-system-user", resultJson);
-            localStorage.setItem(
-              "bus-reservation-system-token",
-              resultJson.token
-            );
-            if (resultJson.role === "ROLE_ADMIN") Navigate("/admin");
-            else if (resultJson.role === "ROLE_USER") Navigate("/user");
-          } else {
-            toast.error(resultJson.message, toastOptions);
-          }
-        }).catch((error)=>{
+      })
+        .then((resolve) => {
+          resolve
+            .json()
+            .then((resultJson) => {
+              if (resolve.status === 200) {
+                console.log(resultJson);
+                localStorage.setItem("bus-reservation-system-user", resultJson);
+                localStorage.setItem(
+                  "bus-reservation-system-token",
+                  resultJson.token
+                );
+                if (resultJson.role === "ROLE_ADMIN") Navigate("/admin");
+                else if (resultJson.role === "ROLE_USER") Navigate("/user");
+              } else {
+                toast.error(resultJson.message, toastOptions);
+              }
+            })
+            .catch((error) => {
+              toast.error(error + " Please try again later...", toastOptions);
+            });
+        })
+        .catch((error) => {
           toast.error(error + " Please try again later...", toastOptions);
         });
-      }).catch((error)=>{
-        toast.error(error + " Please try again later...", toastOptions);
-      });
     }
   };
 
@@ -261,9 +265,9 @@ export default function SignUp() {
               </button>
             </form>
           </div>
-          <ToastContainer />
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
