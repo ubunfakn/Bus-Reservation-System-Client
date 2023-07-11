@@ -14,7 +14,7 @@ export default function Customers() {
       };
 
     const fetchCustomers = ()=>{
-        fetch(`http://localhost:8080/api/customers`,{
+        fetch(`http://localhost:8080/auth/api/customers`,{
             method: 'GET',
             headers:{
                 Accept:'application/json',

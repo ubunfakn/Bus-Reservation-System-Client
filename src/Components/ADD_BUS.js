@@ -33,14 +33,16 @@ export default function ADD_BUS() {
         arrivalDate,
         description,
       };
-      fetch(`http://localhost:8080/api/admin/addbus`, {
+      const token = `Bearer ${localStorage.getItem(
+        "bus-reservation-system-token"
+      )}`
+      fetch(`http://localhost:8080/auth/admin/api/addbus`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem(
-            "bus-reservation-system-token"
-          )}`,
+          'Access-Control-Allow-Origin':'http://localhost:3000',
+          'Authorization': token,
         },
         body: JSON.stringify(data),
       })
@@ -82,7 +84,7 @@ export default function ADD_BUS() {
     ) {
       toast.error("Please enter valid Date", toastOptions);
       return false;
-    }else {
+    } else {
       return true;
     }
   };

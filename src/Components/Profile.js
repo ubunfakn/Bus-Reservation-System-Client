@@ -26,7 +26,7 @@ export default function Profile() {
   };
 
   const fetchUser = () => {
-    fetch(`http://localhost:8080/api/getUser`, {
+    fetch(`http://localhost:8080/auth/api/getUser`, {
       method: "POST",
       headers: {
         Accept: "application/json",

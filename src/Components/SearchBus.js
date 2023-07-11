@@ -40,7 +40,7 @@ export default function SearchBus() {
     const data = { departureDate, origin, destination };
     if (handleValidation()) {
       //fetch data from api and display it on the screen using react components
-      fetch(`http://localhost:8080/getBuses`, {
+      fetch(`http://localhost:8080/auth/getBuses`, {
         method: "POST",
         headers: {
           Accept: "application/json",

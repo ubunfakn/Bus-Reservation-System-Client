@@ -14,7 +14,7 @@ export default function Bookings() {
       };
 
     const fetchBookings = ()=>{
-        fetch(`http://localhost:8080/api/bookings`,{
+        fetch(`http://localhost:8080/auth/admin/api/bookings`,{
             method: 'GET',
             headers:{
                 Accept:'application/json',

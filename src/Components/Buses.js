@@ -14,7 +14,7 @@ export default function Buses() {
       };
 
     const fetchBuses = ()=>{
-        fetch(`http://localhost:8080/api/buses`,{
+        fetch(`http://localhost:8080/auth/admin/api/buses`,{
             method: 'GET',
             headers:{
                 Accept:'application/json',

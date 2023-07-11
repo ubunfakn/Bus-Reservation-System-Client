@@ -14,7 +14,7 @@ export default function AllRoutes() {
       };
 
     const fetchRoutes = ()=>{
-        fetch(`http://localhost:8080/api/routes`,{
+        fetch(`http://localhost:8080/auth/admin/api/routes`,{
             method: 'GET',
             headers:{
                 Accept:'application/json',

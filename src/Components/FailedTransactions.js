@@ -17,7 +17,7 @@ export default function FailedTransactions() {
     e.preventDefault();
     if(handleValidation()){
       const data = {mobile};
-      fetch(`http://localhost/api/failed`,{
+      fetch(`http://localhost/auth/api/failed`,{
         method:'POST',
         headers:{
           'Content-Type':'application/json',

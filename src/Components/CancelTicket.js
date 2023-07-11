@@ -17,7 +17,7 @@ export default function CancelTicket() {
     e.preventDefault();
     if(handleValidation()){
       const data = {mobile, bookingid};
-      fetch(`http://localhost/api/cancel`,{
+      fetch(`http://localhost:8080/auth/api/cancel`,{
         method:'POST',
         headers:{
           'Content-Type':'application/json',

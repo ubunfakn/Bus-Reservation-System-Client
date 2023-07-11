@@ -14,7 +14,7 @@ export default function Users() {
       };
 
     const fetchUsers = ()=>{
-        fetch(`http://localhost:8080/api/users`,{
+        fetch(`http://localhost:8080/auth/admin/api/users`,{
             method: 'GET',
             headers:{
                 Accept:'application/json',

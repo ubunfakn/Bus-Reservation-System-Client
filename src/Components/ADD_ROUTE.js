@@ -29,7 +29,7 @@ export default function ADD_ROUTE() {
         dropOffPoint,
         dropOffTime,
       };
-      fetch(`http://localhost:8080/api/admin/addroute`, {
+      fetch(`http://localhost:8080/auth/admin/api/addroute`, {
         method: "POST",
         headers: {
           Accept: "application/json",

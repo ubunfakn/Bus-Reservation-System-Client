@@ -17,7 +17,7 @@ export default function ViewTicket() {
     e.preventDefault();
     if(handleValidation()){
       const data = {mobile, bookingid};
-      fetch(`http://localhost/api/view`,{
+      fetch(`http://localhost/auth/api/view`,{
         method:'POST',
         headers:{
           'Content-Type':'application/json',
