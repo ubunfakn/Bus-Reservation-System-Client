@@ -3,42 +3,50 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Bookings() {
+  const [bookings, setBookings] = useState([]);
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 6500,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
 
-    const [bookings, setBookings] = useState([]);
-    const toastOptions = {
-        position: "bottom-right",
-        autoClose: 6500,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-      };
-
-    const fetchBookings = ()=>{
-        fetch(`http://localhost:8080/auth/admin/api/bookings`,{
-            method: 'GET',
-            headers:{
-                Accept:'application/json',
-                'Content-Type':'application/json',
-                Authorization:`Bearer ${localStorage.getItem('bus-reservation-system-token')}`
-            }
-        }).then((resolve)=>{
-            resolve.json().then((result)=>{
-                if(result.status === 200){
-                    setBookings(result.routes);
-                }else{
-                    toast.error(result.message,toastOptions);
-                }
-            }).catch((error)=>{
-                toast.error(error, toastOptions);
-            });
-        }).catch((error)=>{
-            toast.error(error, toastOptions);
-        });
-    }
-
-    useEffect(()=>{
-        fetchBookings();
+  const fetchBookings = () => {
+    fetch(`http://localhost:8080/auth/admin/api/bookings`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem(
+          "bus-reservation-system-token"
+        )}`,
+      },
     })
+      .then((resolve) => {
+        if (resolve.status === 200) {
+          resolve
+            .json()
+            .then((result) => {
+              setBookings(result);
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error(error, toastOptions);
+            });
+        } else {
+          toast.error("No bookings found", toastOptions);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error, toastOptions);
+      });
+  };
+
+  useEffect(() => {
+    fetchBookings();
+  });
   return (
     <div className="col-md-12">
       <div className="card">
@@ -65,24 +73,24 @@ export default function Bookings() {
                 </tr>
               </thead>
               <tbody>
-                {bookings.map((item)=>
-                    <tr>
+                {bookings.map((item) => (
+                  <tr>
                     <th scope="row">{item.id}</th>
-                    <td>{item.number}</td>
+                    <td>{item.busNumber}</td>
                     <td>{item.origin}</td>
-                    <td>{item.destination}</td>
+                    <td>{item.destinantion}</td>
                     <td>{item.boardingDate}</td>
                     <td>{item.passengers}</td>
-                    <td>{item.cutomer_id}</td>
+                    <td>{item.customer_id}</td>
                     <td>{item.email}</td>
                     <td>{item.mobile}</td>
                     <td>{item.status}</td>
                     <td>
-                        <i className="btn btn-danger fa fa-delete-left mr-1"></i>
-                        <i className="btn btn-warning fa fa-pen-nib ml-1"></i>
+                      <i className="btn btn-danger fa fa-delete-left mr-1"></i>
+                      <i className="btn btn-warning fa fa-pen-nib ml-1"></i>
                     </td>
-                    </tr>
-                )}
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

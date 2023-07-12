@@ -41,11 +41,11 @@ export default function ADD_ROUTE() {
         body: JSON.stringify(data),
       })
         .then((resolve) => {
+          console.log(resolve);
           resolve
             .json()
             .then((resultJson) => {
-              if (resultJson.status === 200) {
-                console.log(resultJson);
+              if (resolve.status === 200) {
                 Navigate("/routes");
               } else {
                 toast.error(resultJson.message, toastOptions);

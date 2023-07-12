@@ -6,7 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function Profile() {
   const [readOnly, setReadOnly] = useState(true);
-  const [userId, setUserId] = useState();
+  const [id, setUserId] = useState();
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState(
@@ -26,7 +26,7 @@ export default function Profile() {
   };
 
   const fetchUser = () => {
-    fetch(`http://localhost:8080/auth/api/getUser`, {
+    fetch(`http://localhost:8080/auth/api/getuser`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -35,13 +35,13 @@ export default function Profile() {
           "bus-reservation-system-token"
         )}`,
       },
-      body: JSON.stringify(email),
+      body: email,
     })
-      .then((resolve) => {
+      .then(async (resolve) => {
         resolve
           .json()
           .then((result) => {
-            if (result.status === 200) {
+            if (resolve.status === 200) {
               setUserId(result.id);
               setName(result.name);
               setMobile(result.mobile);
@@ -55,10 +55,12 @@ export default function Profile() {
             }
           })
           .catch((error) => {
+            console.log(error);
             toast.error(error, toastOptions);
           });
       })
       .catch((error) => {
+        console.log(error);
         toast.error(error, toastOptions);
       });
   };
@@ -67,7 +69,7 @@ export default function Profile() {
     if (handleValidation()) {
       setReadOnly(true);
       const data = {
-        userId,
+        id,
         name,
         email,
         mobile,
@@ -76,8 +78,8 @@ export default function Profile() {
         state,
         country,
       };
-      fetch(`http://localhost:8080/api/editprofile`, {
-        method: "POST",
+      fetch(`http://localhost:8080/auth/api/editprofile`, {
+        method: "PUT",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -133,10 +135,10 @@ export default function Profile() {
     }
   };
 
-  // eslint-disable-next-line
   useEffect(() => {
     fetchUser();
-  });
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <div className="col-md-6 offset-md-1">
@@ -160,7 +162,7 @@ export default function Profile() {
                   <td></td>
                   <td></td>
                   <td>
-                    <h3>{userId}</h3>
+                    <h3>BRS{id}U</h3>
                   </td>
                 </tr>
                 <tr>
@@ -210,6 +212,7 @@ export default function Profile() {
                       <input
                         type="text"
                         value={mobile}
+                        onChange={(e) => setMobile(e.target.value)}
                         readOnly={readOnly}
                         className="bg-dark text-white"
                       />
@@ -245,6 +248,7 @@ export default function Profile() {
                         type="text"
                         value={address}
                         readOnly={readOnly}
+                        onChange={(e) => setAddress(e.target.value)}
                         className="bg-dark text-white"
                       />
                     </h3>
@@ -262,6 +266,7 @@ export default function Profile() {
                         type="text"
                         value={state}
                         readOnly={readOnly}
+                        onChange={(e) => setState(e.target.value)}
                         className="bg-dark text-white"
                       />
                     </h3>
@@ -279,6 +284,7 @@ export default function Profile() {
                         type="text"
                         value={country}
                         readOnly={readOnly}
+                        onChange={(e) => setCountry(e.target.value)}
                         className="bg-dark text-white"
                       />
                     </h3>

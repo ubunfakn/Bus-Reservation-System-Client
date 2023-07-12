@@ -24,6 +24,8 @@ export default function ADD_BUS() {
   const getData = (e) => {
     e.preventDefault();
     if (handleValidation()) {
+      departureDate.toString().split(11);
+      departureDate.toString().split(11);
       const data = {
         name,
         number,
@@ -35,14 +37,14 @@ export default function ADD_BUS() {
       };
       const token = `Bearer ${localStorage.getItem(
         "bus-reservation-system-token"
-      )}`
+      )}`;
       fetch(`http://localhost:8080/auth/admin/api/addbus`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          'Access-Control-Allow-Origin':'http://localhost:3000',
-          'Authorization': token,
+          "Access-Control-Allow-Origin": "http://localhost:3000",
+          Authorization: token,
         },
         body: JSON.stringify(data),
       })
@@ -50,7 +52,7 @@ export default function ADD_BUS() {
           resolve
             .json()
             .then((resultJson) => {
-              if (resultJson.status === 200) {
+              if (resolve.status === 200) {
                 console.log(resultJson);
                 Navigate("/buses");
               } else {

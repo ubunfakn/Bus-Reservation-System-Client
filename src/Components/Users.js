@@ -3,42 +3,50 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Users() {
+  const [users, setUsers] = useState([]);
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 6500,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
 
-    const [users, setUsers] = useState([]);
-    const toastOptions = {
-        position: "bottom-right",
-        autoClose: 6500,
-        pauseOnHover: true,
-        draggable: true,
-        theme: "dark",
-      };
-
-    const fetchUsers = ()=>{
-        fetch(`http://localhost:8080/auth/admin/api/users`,{
-            method: 'GET',
-            headers:{
-                Accept:'application/json',
-                'Content-Type':'application/json',
-                Authorization:`Bearer ${localStorage.getItem('bus-reservation-system-token')}`
-            }
-        }).then((resolve)=>{
-            resolve.json().then((result)=>{
-                if(result.status === 200){
-                    setUsers(result.routes);
-                }else{
-                    toast.error(result.message,toastOptions);
-                }
-            }).catch((error)=>{
-                toast.error(error, toastOptions);
-            });
-        }).catch((error)=>{
-            toast.error(error, toastOptions);
-        });
-    }
-
-    useEffect(()=>{
-        fetchUsers();
+  const fetchUsers = () => {
+    fetch(`http://localhost:8080/auth/admin/api/users`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem(
+          "bus-reservation-system-token"
+        )}`,
+      },
     })
+      .then((resolve) => {
+        if (resolve.status === 200) {
+          resolve
+            .json()
+            .then((result) => {
+              setUsers(result);
+            })
+            .catch((error) => {
+              console.log(error);
+              toast.error(error, toastOptions);
+            });
+        } else {
+          toast.error("No users found", toastOptions);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error, toastOptions);
+      });
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  });
   return (
     <div className="col-md-12">
       <div className="card">
@@ -62,21 +70,17 @@ export default function Users() {
                 </tr>
               </thead>
               <tbody>
-                {users.map((item)=>
-                    <tr>
-                    <th scope="row">{item.id}</th>
+                {users.map((item) => (
+                  <tr key={item.id}>
+                    <th scope="row">BRS{item.id}U</th>
                     <td>{item.name}</td>
                     <td>{item.email}</td>
                     <td>{item.mobile}</td>
                     <td>{item.role}</td>
                     <td>{item.state}</td>
                     <td>{item.country}</td>
-                    <td>
-                        <i className="btn btn-danger fa fa-delete-left mr-1"></i>
-                        <i className="btn btn-warning fa fa-pen-nib ml-1"></i>
-                    </td>
-                    </tr>
-                )}
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
