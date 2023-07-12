@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import validator from "validator";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function ADD_BUS() {
+  const [id, setId] = useState(undefined);
   const [name, setName] = useState("");
   const [number, setNumber] = useState("");
   const [capacity, setCapacity] = useState();
@@ -12,6 +13,9 @@ export default function ADD_BUS() {
   const [departureDate, setDepartureDate] = useState();
   const [arrivalDate, setArrivalDate] = useState();
   const [description, setDescription] = useState("");
+  const [available, setAvailable] = useState();
+  const state = useLocation().state;
+  const [isUpdate, setIsUpdate] = useState(false);
   const Navigate = useNavigate("");
   const toastOptions = {
     position: "bottom-right",
@@ -35,6 +39,17 @@ export default function ADD_BUS() {
         arrivalDate,
         description,
       };
+      const updateData = {
+        id,
+        name,
+        number,
+        capacity,
+        type,
+        available,
+        departureDate,
+        arrivalDate,
+        description,
+      };
       const token = `Bearer ${localStorage.getItem(
         "bus-reservation-system-token"
       )}`;
@@ -46,7 +61,7 @@ export default function ADD_BUS() {
           "Access-Control-Allow-Origin": "http://localhost:3000",
           Authorization: token,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(isUpdate===true?updateData:data),
       })
         .then((resolve) => {
           resolve
@@ -91,12 +106,34 @@ export default function ADD_BUS() {
     }
   };
 
+  const updateData = ()=>{
+    setId(state.id);
+    setArrivalDate(state.arrivalDate);
+    setCapacity(state.capacity);
+    setDepartureDate(state.departureDate);
+    setDescription(state.description);
+    setName(state.name);
+    setAvailable(state.available);
+    setNumber(state.number);
+    setType(state.type);
+  }
+
+  useEffect(()=>{
+    if(state!==null){
+      setIsUpdate(true);
+      updateData();
+    }else{
+      setIsUpdate(false);
+    }
+    // eslint-disable-next-line
+  },[])
+
   return (
     <div className="col-md-4 offset-md-1">
       <div className="card mb-5 text-white">
         <div className="card-title mt-4">
           <div className="font-weight-bold">
-            <h1>Add-Bus</h1>
+          {isUpdate===false?<h1>Add-Bus</h1>:<h1>Update-Bus</h1>}
           </div>
           <div className="card-body">
             <form onSubmit={getData}>
@@ -222,7 +259,7 @@ export default function ADD_BUS() {
                 </div>
               </div>
               <button type="submit" className="btn btn-primary btn-block mt-4">
-                Add-Bus
+              {isUpdate===false?"Add-Bus":"Update-Bus"}
               </button>
             </form>
           </div>

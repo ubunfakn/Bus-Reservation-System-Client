@@ -1,15 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import validator from "validator";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function ADD_ROUTE() {
+  const [id, setId] = useState(undefined);
+  const [origin, setOrigin] = useState("");
+  const [destination, setDestination] = useState("");
   const [pickUpPoint, setPickUpPoint] = useState("");
   const [dropOffPoint, setDropOffPoint] = useState("");
   const [pickUpTime, setPickUpTime] = useState();
   const [dropOffTime, setDropOffTime] = useState();
   const [number, setNumber] = useState("");
+  const state = useLocation().state;
+  const [isUpdate, setIsUpdate] = useState(false);
   const Navigate = useNavigate("");
   const toastOptions = {
     position: "bottom-right",
@@ -24,11 +29,23 @@ export default function ADD_ROUTE() {
     if (handleValidation()) {
       const data = {
         number,
+        origin,
+        destination,
         pickUpPoint,
         pickUpTime,
         dropOffPoint,
         dropOffTime,
       };
+      const updateData = {
+        id,
+        origin,
+        destination,
+        number,
+        pickUpPoint,
+        pickUpTime,
+        dropOffPoint,
+        dropOffTime,
+      }
       fetch(`http://localhost:8080/auth/admin/api/addroute`, {
         method: "POST",
         headers: {
@@ -38,7 +55,7 @@ export default function ADD_ROUTE() {
             "bus-reservation-system-token"
           )}`,
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(isUpdate===true?updateData:data),
       })
         .then((resolve) => {
           console.log(resolve);
@@ -61,12 +78,35 @@ export default function ADD_ROUTE() {
     }
   };
 
+  const updateData = ()=>{
+    setPickUpPoint(state.pickUpPoint);
+    setDropOffPoint(state.dropOffPoint);
+    setDropOffTime(state.dropOffTime);
+    setPickUpTime(state.pickUpTime);
+    setNumber(state.number);
+    setOrigin(state.origin);
+    setDestination(state.destination);
+    setId(state.id);
+  }
+
+  useEffect(()=>{
+    if(state!==null){
+      setIsUpdate(true);
+      updateData();
+    }else{
+      setIsUpdate(false);
+    }
+    // eslint-disable-next-line
+  },[])
+
   const handleValidation = () => {
     if (
       number === "" ||
       pickUpTime === undefined ||
       dropOffTime === undefined ||
       pickUpPoint === "" ||
+      origin === "" ||
+      destination === "" ||
       dropOffPoint === ""
     ) {
       toast.error("Fields cannot be empty", toastOptions);
@@ -87,7 +127,7 @@ export default function ADD_ROUTE() {
       <div className="card mb-5 text-white">
         <div className="card-title mt-4">
           <div className="font-weight-bold">
-            <h1>Add-Route</h1>
+            {isUpdate===false?<h1>Add-Route</h1>:<h1>Update-Route</h1>}
           </div>
           <div className="card-body">
             <form onSubmit={getData}>
@@ -107,6 +147,39 @@ export default function ADD_ROUTE() {
                   />
                 </div>
                 {/* Bus-Number  */}
+              </div>
+
+              <div className="row">
+                {/* Origin  */}
+                <div className="col">
+                  <lable className="d-flex" htmlFor="origin">
+                    Origin
+                  </lable>
+                  <input
+                    value={origin}
+                    onChange={(e) => setOrigin(e.target.value)}
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter Origin"
+                    id="origin"
+                  />
+                </div>
+                {/* Origin  */}
+                {/* Destination  */}
+                <div className="col">
+                  <lable className="d-flex" htmlFor="destination">
+                    Destination
+                  </lable>
+                  <input
+                    value={destination}
+                    onChange={(e) => setDestination(e.target.value)}
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter Destination"
+                    id="destination"
+                  />
+                </div>
+                {/* Destination  */}
               </div>
 
               <div className="row mt-3">
@@ -179,7 +252,7 @@ export default function ADD_ROUTE() {
                 {/* Dropoff-Time  */}
               </div>
               <button type="submit" className="btn btn-primary btn-block mt-4">
-                Add-Route
+                {isUpdate===false?"Add-Route":"Update-Route"}
               </button>
             </form>
           </div>

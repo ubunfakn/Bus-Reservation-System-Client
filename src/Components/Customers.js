@@ -35,12 +35,43 @@ export default function Customers() {
               toast.error(error, toastOptions);
             });
         } else {
+          setCustomers([]);
           toast.error("No customers found", toastOptions);
         }
       })
       .catch((error) => {
         console.log(error);
         toast.error(error, toastOptions);
+      });
+  };
+
+  const deleteData = (id) => {
+    fetch(`http://localhost:8080/auth/admin/api/deletecustomer/${id}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem(
+          "bus-reservation-system-token"
+        )}`,
+      },
+    })
+      .then((resolve) => {
+        if (resolve.status === 200) {
+          toast.success("Customer Deleted", toastOptions);
+          fetchCustomers();
+        } else {
+          toast.error(
+            "Something went wrong!! Please try again later",
+            toastOptions
+          );
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          "Something went wrong!! Please try again later",
+          toastOptions
+        );
       });
   };
 
@@ -76,7 +107,10 @@ export default function Customers() {
                     <td>{item.mobile}</td>
                     <td>{item.email}</td>
                     <td>
-                      <i className="btn btn-danger fa fa-delete-left mr-1"></i>
+                      <i
+                        onClick={() => deleteData(item.id)}
+                        className="btn btn-danger fa fa-delete-left mr-1"
+                      ></i>
                     </td>
                   </tr>
                 ))}

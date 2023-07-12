@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from "react";
+import { ToastContainer } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Navigationbar() {
   const [show, setShow] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [name, setName] = useState("");
   const Navigate = useNavigate("");
+  const toastOptions = {
+    position: "bottom-right",
+    autoClose: 6500,
+    pauseOnHover: true,
+    draggable: true,
+    theme: "dark",
+  };
 
   const logout = () => {
     localStorage.removeItem("bus-reservation-system-token");
@@ -14,9 +25,44 @@ export default function Navigationbar() {
     Navigate("/login");
   };
 
+  const fetchUser = () => {
+    const email = localStorage.getItem("bus-reservation-system-user");
+    console.log(email)
+    fetch(`http://localhost:8080/auth/api/getuser`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem(
+          "bus-reservation-system-token"
+        )}`,
+      },
+      body: email,
+    })
+      .then(async (resolve) => {
+        resolve
+          .json()
+          .then((result) => {
+            if (resolve.status === 200) {
+              setName(result.name);
+            } else {
+              toast.error(result.message, toastOptions);
+            }
+          })
+          .catch((error) => {
+            toast.error(error, toastOptions);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(error, toastOptions);
+      });
+  };
+
   // eslint-disable-next-line
   useEffect(() => {
     if (localStorage.getItem("bus-reservation-system-token")) {
+      fetchUser();
       setShow(false);
     } else {
       setShow(true);
@@ -89,7 +135,7 @@ export default function Navigationbar() {
               </NavLink>
             ) : (
               <NavLink className="nav-link" to={"/profile"}>
-                Ankit Kumar Nashine
+                {name}
               </NavLink>
             )}
           </li>
@@ -106,6 +152,7 @@ export default function Navigationbar() {
           </li>
         </ul>
       </div>
+      <ToastContainer />
     </nav>
   );
 }

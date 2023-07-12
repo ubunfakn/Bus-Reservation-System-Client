@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function Buses() {
   const [buses, setBuses] = useState([]);
+  const Navigate = useNavigate("");
   const toastOptions = {
     position: "bottom-right",
     autoClose: 6500,
@@ -35,6 +37,7 @@ export default function Buses() {
               toast.error(error, toastOptions);
             });
         } else {
+          setBuses([]);
           toast.error("No buses found", toastOptions);
         }
       })
@@ -43,6 +46,32 @@ export default function Buses() {
         toast.error(error, toastOptions);
       });
   };
+
+  const update = (item)=>{
+    Navigate("/addbus",{state:item});
+  }
+
+  const deleteData = (id)=>{
+    fetch(`http://localhost:8080/auth/admin/api/deletebus/${id}`,{
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem(
+          "bus-reservation-system-token"
+        )}`,
+      },
+    }).then((resolve)=>{
+      if(resolve.status === 200){
+        toast.success("Bus Deleted", toastOptions);
+        fetchBuses();
+      }else{
+        toast.error("Something went wrong!! Please try again later", toastOptions);
+      }
+    }).catch((error)=>{
+      toast.error("Something went wrong!! Please try again later", toastOptions)
+    })
+  }
 
   useEffect(() => {
     fetchBuses();
@@ -84,8 +113,8 @@ export default function Buses() {
                     <td>{item.departureDate}</td>
                     <td>{item.arrivalDate}</td>
                     <td>
-                      <i className="btn btn-danger fa fa-delete-left mr-1"></i>
-                      <i className="btn btn-warning fa fa-pen-nib ml-1"></i>
+                      <i onClick={()=>deleteData(item.id)} className="btn btn-danger fa fa-delete-left mr-1"></i>
+                      <i onClick={()=>update(item)} className="btn btn-warning fa fa-pen-nib ml-1"></i>
                     </td>
                   </tr>
                 ))}

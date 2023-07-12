@@ -35,9 +35,13 @@ export default function ChangePassword() {
           Navigate("/login");
         }else{
           resolve.json().then((result)=>{
-            toast.error(result,toastOptions);
+            toast.error("Access Denied",toastOptions);
+          }).catch((error)=>{
+            toast.error(error, toastOptions);
           })
       }
+    }).catch((error)=>{
+      toast.error(error, toastOptions);
     })
     }
   }

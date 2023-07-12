@@ -1,8 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function ADMIN_HOME() {
   const Navigate = useNavigate("");
+  const [busCount, setBusCount] = useState(10);
+  const [routeCount, setRouteCount] = useState(8);
+  const [userCount, setUserCount] = useState(6);
+  const [bookingCount, setBookingCount] = useState(20);
+  const [customerCount, setCustomerCount] = useState(25);
+  // eslint-disable-next-line
+  const [transactionCount, setTransactionCount] = useState(13);
+
+  const fetchCounts = ()=>{
+    fetch(`http://localhost:8080/auth/admin/api/countall`, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem(
+          "bus-reservation-system-token"
+        )}`,
+      },
+    }).then((resolve)=>{
+      if(resolve.status === 200){
+        resolve.json().then((data) =>{
+          setCustomerCount(data.customerCount);
+          setBusCount(data.busCount);
+          setRouteCount(data.routeCount);
+          setUserCount(data.userCount);
+          setBookingCount(data.bookingCount);
+        })
+      }
+    })
+  }
+  useEffect(()=>{
+    fetchCounts();
+     // eslint-disable-next-line
+  },[])
   return (
     <div className="col-md-10 offset-md-1">
       <div className="card">
@@ -16,7 +50,7 @@ export default function ADMIN_HOME() {
               <div className="card inside-card">
                 <div className="card-body">
                   <i className="fa-solid fa-users fa-6x"></i>
-                  <h2 className="text-center mt-4">4</h2>
+                  <h2 className="text-center mt-4">{customerCount}</h2>
                   <button
                     onClick={() => Navigate("/customers")}
                     className="btn btn-warning btn-block"
@@ -30,7 +64,7 @@ export default function ADMIN_HOME() {
               <div className="card inside-card">
                 <div className="card-body">
                   <i className="fa-solid fa-ticket fa-6x"></i>
-                  <h2 className="text-center mt-4">8</h2>
+                  <h2 className="text-center mt-4">{bookingCount}</h2>
                   <button
                     onClick={() => Navigate("/bookings")}
                     className="btn btn-warning btn-block text-white"
@@ -44,7 +78,7 @@ export default function ADMIN_HOME() {
               <div className="card inside-card">
                 <div className="card-body">
                   <i className="fa-solid fa-bus fa-6x"></i>
-                  <h2 className="text-center mt-4">2</h2>
+                  <h2 className="text-center mt-4">{busCount}</h2>
                   <button
                     onClick={() => Navigate("/buses")}
                     className="btn btn-warning btn-block"
@@ -58,7 +92,7 @@ export default function ADMIN_HOME() {
               <div className="card inside-card">
                 <div className="card-body">
                   <i className="fa-solid fa-road fa-6x"></i>
-                  <h2 className="text-center mt-4">2</h2>
+                  <h2 className="text-center mt-4">{routeCount}</h2>
                   <button
                     onClick={() => Navigate("/routes")}
                     className="btn btn-warning btn-block"
@@ -74,7 +108,7 @@ export default function ADMIN_HOME() {
               <div className="card inside-card">
                 <div className="card-body">
                   <i className="fa-solid fa-money-bill fa-6x"></i>
-                  <h2 className="text-center mt-4">19</h2>
+                  <h2 className="text-center mt-4">{transactionCount}</h2>
                   <button
                     onClick={() => Navigate("/transactions")}
                     className="btn btn-warning btn-block"
@@ -88,7 +122,7 @@ export default function ADMIN_HOME() {
               <div className="card inside-card">
                 <div className="card-body">
                   <i className="fa-solid fa-users-viewfinder fa-6x"></i>
-                  <h2 className="text-center mt-4">2</h2>
+                  <h2 className="text-center mt-4">{userCount}</h2>
                   <button
                     onClick={() => Navigate("/users")}
                     className="btn btn-warning btn-block"
