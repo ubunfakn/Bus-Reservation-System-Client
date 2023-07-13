@@ -28,6 +28,9 @@ import Buses from "./Components/Buses";
 import Users from "./Components/Users";
 import Customers from './Components/Customers';
 import SearchBus from "./Components/SearchBus";
+import AddPassengers from "./Components/AddPassengers";
+import SelectSeat from './Components/SelectSeat';
+import BookingConfirmation from "./Components/BookingConfirmation";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -73,6 +76,9 @@ function App() {
           <Route path="/forgot" element={<ForgotPassword />} />
           <Route path="/change" element={<ChangePassword />} />
           <Route path="/searchbuses" element={<SearchBus />} />
+          <Route path="/addpass" element={<AddPassengers />} />
+          <Route path="/selectseat" element={<SelectSeat />} />
+          <Route path="/bookingconfirmation" element={<BookingConfirmation />}/>
         </Routes>
         {isAdmin === true ? (
           <Routes>

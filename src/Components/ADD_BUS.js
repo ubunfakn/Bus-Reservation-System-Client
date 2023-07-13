@@ -61,7 +61,7 @@ export default function ADD_BUS() {
           "Access-Control-Allow-Origin": "http://localhost:3000",
           Authorization: token,
         },
-        body: JSON.stringify(isUpdate===true?updateData:data),
+        body: JSON.stringify(isUpdate === true ? updateData : data),
       })
         .then((resolve) => {
           resolve
@@ -106,7 +106,7 @@ export default function ADD_BUS() {
     }
   };
 
-  const updateData = ()=>{
+  const updateData = () => {
     setId(state.id);
     setArrivalDate(state.arrivalDate);
     setCapacity(state.capacity);
@@ -116,24 +116,24 @@ export default function ADD_BUS() {
     setAvailable(state.available);
     setNumber(state.number);
     setType(state.type);
-  }
+  };
 
-  useEffect(()=>{
-    if(state!==null){
+  useEffect(() => {
+    if (state !== null) {
       setIsUpdate(true);
       updateData();
-    }else{
+    } else {
       setIsUpdate(false);
     }
     // eslint-disable-next-line
-  },[])
+  }, []);
 
   return (
     <div className="col-md-4 offset-md-1">
       <div className="card mb-5 text-white">
         <div className="card-title mt-4">
           <div className="font-weight-bold">
-          {isUpdate===false?<h1>Add-Bus</h1>:<h1>Update-Bus</h1>}
+            {isUpdate === false ? <h1>Add-Bus</h1> : <h1>Update-Bus</h1>}
           </div>
           <div className="card-body">
             <form onSubmit={getData}>
@@ -259,7 +259,7 @@ export default function ADD_BUS() {
                 </div>
               </div>
               <button type="submit" className="btn btn-primary btn-block mt-4">
-              {isUpdate===false?"Add-Bus":"Update-Bus"}
+                {isUpdate === false ? "Add-Bus" : "Update-Bus"}
               </button>
             </form>
           </div>

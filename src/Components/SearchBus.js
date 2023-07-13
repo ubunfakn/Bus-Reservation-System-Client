@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import validator from "validator";
 import "react-toastify/dist/ReactToastify.css";
@@ -10,7 +10,8 @@ export default function SearchBus() {
   const [origin, setOrigin] = useState(locationState.origin);
   const [destination, setDestination] = useState(locationState.destination);
   const [date, setDate] = useState(locationState.date);
-  const [buses, setBuses] = useState([]);
+  const [buses, setBuses] = useState(locationState.buses);
+  const Navigate = useNavigate('');
   const toastOptions = {
     position: "bottom-right",
     autoClose: 6500,
@@ -21,7 +22,6 @@ export default function SearchBus() {
 
   // eslint-disable-next-line
   const searchCity = (val) => {
-    console.log(val);
     fetch(``)
       .then((resolve) => {
         resolve
@@ -51,7 +51,6 @@ export default function SearchBus() {
       })
       .then((resolve) => {
         if (resolve.status === 200) {
-          console.log(resolve.status);
           resolve
             .json()
             .then((result) => {
@@ -62,7 +61,7 @@ export default function SearchBus() {
               toast.error("Please try later", toastOptions);
             });
         } else {
-          console.log(resolve.status);
+          setBusNotFound(true);
         }
       })
   }
@@ -86,16 +85,10 @@ export default function SearchBus() {
     }
   };
 
-  // eslint-disable-next-line
-  useEffect(() => {
-    // if (locationState.statusOfSearch === false) {
-    //   setBusNotFound(true);
-    // } else {
-    //   setBusNotFound(false);
-    // }
-    console.log(busNotFound);
-    console.log(locationState.buses);
-  });
+  const addPassengers = (bus)=>{
+    Navigate("/addpass", {state:{locationState,bus}});
+  }
+
   return (
     <div className="col-md-10 offset-md-1">
       <div className="card">
@@ -184,8 +177,8 @@ export default function SearchBus() {
                     <td>{item.departureDate}</td>
                     <td>{item.arrivalDate}</td>
                     <td>
-                      <button className="btn btn-lg btn-warning">
-                        Select Seats
+                      <button onClick={()=>addPassengers(item)} className="btn btn-warning">
+                        Add Passengers
                       </button>
                     </td>
                   </tr>

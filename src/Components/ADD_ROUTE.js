@@ -13,6 +13,8 @@ export default function ADD_ROUTE() {
   const [pickUpTime, setPickUpTime] = useState();
   const [dropOffTime, setDropOffTime] = useState();
   const [number, setNumber] = useState("");
+  const [distance, setDistance] = useState("");
+  const [price, setPrice] = useState(undefined);
   const state = useLocation().state;
   const [isUpdate, setIsUpdate] = useState(false);
   const Navigate = useNavigate("");
@@ -35,6 +37,8 @@ export default function ADD_ROUTE() {
         pickUpTime,
         dropOffPoint,
         dropOffTime,
+        distance,
+        price
       };
       const updateData = {
         id,
@@ -45,6 +49,8 @@ export default function ADD_ROUTE() {
         pickUpTime,
         dropOffPoint,
         dropOffTime,
+        distance,
+        price
       }
       fetch(`http://localhost:8080/auth/admin/api/addroute`, {
         method: "POST",
@@ -86,6 +92,8 @@ export default function ADD_ROUTE() {
     setNumber(state.number);
     setOrigin(state.origin);
     setDestination(state.destination);
+    setDistance(state.distance);
+    setPrice(state.price);
     setId(state.id);
   }
 
@@ -107,7 +115,9 @@ export default function ADD_ROUTE() {
       pickUpPoint === "" ||
       origin === "" ||
       destination === "" ||
-      dropOffPoint === ""
+      dropOffPoint === "" ||
+      distance === "" ||
+      price === undefined
     ) {
       toast.error("Fields cannot be empty", toastOptions);
       return false;
@@ -149,7 +159,7 @@ export default function ADD_ROUTE() {
                 {/* Bus-Number  */}
               </div>
 
-              <div className="row">
+              <div className="row mt-3">
                 {/* Origin  */}
                 <div className="col">
                   <lable className="d-flex" htmlFor="origin">
@@ -251,6 +261,43 @@ export default function ADD_ROUTE() {
                 </div>
                 {/* Dropoff-Time  */}
               </div>
+
+              <div className="row mt-3">
+                {/* Distance  */}
+                <div className="col">
+                  <label htmlFor="distance" className="d-flex">
+                    Distance
+                  </label>
+                  <input
+                    id="distance"
+                    type="text"
+                    name="distance"
+                    value={distance}
+                    onChange={(e) => setDistance(e.target.value)}
+                    className="form-control"
+                    placeholder="Enter Approximate Distance"
+                  />
+                </div>
+                {/* Distance  */}
+
+                {/* Price-Per-Seat  */}
+                <div className="col">
+                  <lable className="d-flex" htmlFor="price">
+                    Ticket Fare
+                  </lable>
+                  <input
+                    type="number"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    className="form-control"
+                    id="price"
+                    placeholder="Enter price of each ticket"
+                    name="price"
+                  />
+                </div>
+                {/* Price-Per-Seat  */}
+              </div>
+
               <button type="submit" className="btn btn-primary btn-block mt-4">
                 {isUpdate===false?"Add-Route":"Update-Route"}
               </button>

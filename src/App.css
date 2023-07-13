@@ -86,6 +86,20 @@
   margin-top: -5rem!important;
 }
 
+.seat-list{
+  border-radius: 5px;
+  border: 3px solid #282c34;
+  font-size: 18px;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  margin-left: 1.5em!important;
+  width: 4em!important;
+  height: 4em!important;
+  background-color: green;
+}
+
 
 
 

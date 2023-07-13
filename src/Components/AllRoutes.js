@@ -106,6 +106,8 @@ export default function AllRoutes() {
                   <th scope="col">PICKUP_TIME</th>
                   <th scope="col">DROPOFF_PONT</th>
                   <th scope="col">DROPOFF_TIME</th>
+                  <th scope="col">DISTANCE</th>
+                  <th scope="col">PRICE</th>
                   <th scope="col">Actions</th>
                 </tr>
               </thead>
@@ -120,6 +122,8 @@ export default function AllRoutes() {
                     <td>{item.pickUpTime}</td>
                     <td>{item.dropOffPoint}</td>
                     <td>{item.dropOffTime}</td>
+                    <td>{item.distance}</td>
+                    <td>{item.price}</td>
                     <td>
                       <i
                         onClick={() => deleteData(item.id)}

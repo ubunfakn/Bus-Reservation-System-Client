@@ -9,7 +9,6 @@ export default function Reservation() {
   const [origin, setOrigin] = useState("");
   const [destination, setDestination] = useState("");
   const Navigate = useNavigate("");
-  const [buses, setBuses] = useState([{}]);
   const toastOptions = {
     position: "bottom-right",
     autoClose: 6500,
@@ -53,13 +52,14 @@ export default function Reservation() {
             // console.log(resolve.status);
             resolve
               .json()
-              .then((result) => {
-                setBuses(result);
-                console.log(buses)
+              .then((buses) => {
                 Navigate("/searchbuses", {
                   state: {
                     statusOfSearch: true,
-                    buses
+                    origin:origin,
+                    destination:destination,
+                    date:date,
+                    buses:buses,
                   },
                 });
               })
@@ -69,11 +69,7 @@ export default function Reservation() {
           } else {
             // console.log(resolve.status);
             Navigate("/searchbuses", {
-              state: { statusOfSearch: false ,
-              origin,
-              destination,
-              date,
-              }
+              state: { statusOfSearch: false, origin, destination, date },
             });
           }
         })
