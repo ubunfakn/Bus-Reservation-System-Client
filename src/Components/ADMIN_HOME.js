@@ -107,20 +107,6 @@ export default function ADMIN_HOME() {
             <div className="col-md-3">
               <div className="card inside-card">
                 <div className="card-body">
-                  <i className="fa-solid fa-money-bill fa-6x"></i>
-                  <h2 className="text-center mt-4">{transactionCount}</h2>
-                  <button
-                    onClick={() => Navigate("/transactions")}
-                    className="btn btn-warning btn-block"
-                  >
-                    Transactions
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-3">
-              <div className="card inside-card">
-                <div className="card-body">
                   <i className="fa-solid fa-users-viewfinder fa-6x"></i>
                   <h2 className="text-center mt-4">{userCount}</h2>
                   <button
