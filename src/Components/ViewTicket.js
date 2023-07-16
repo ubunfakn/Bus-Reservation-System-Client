@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function ViewTicket() {
   const [mobile, setMobile] = useState(null);
   const [bookingid, setBookingid] = useState(undefined);
+  const Navigate = useNavigate("");
   const toastOptions = {
     position:'bottom-right',
     autoClose:6500,
@@ -17,23 +19,25 @@ export default function ViewTicket() {
     e.preventDefault();
     if(handleValidation()){
       const data = {mobile, bookingid};
-      fetch(`http://localhost/auth/api/view`,{
+      fetch(`http://localhost:8080/auth/api/view`,{
         method:'POST',
         headers:{
           'Content-Type':'application/json',
-          Accept:'application/json'
+          Accept:'application/json',
+          'Access-Control-Allow-Origin':'http://localhost:3000'
         },
         body:JSON.stringify(data)
       }).then((resolve)=>{
         if(resolve.status===200){
           resolve.json().then((result)=>{
             console.log(result);
+            Navigate('/ticket', {state:{booking:result,cancelStatus:false}})
           }).catch((error)=>{
             toast.error(error + " Please Try again later!..", toastOptions);
           })
         }else{
           console.log(resolve);
-          toast.error(resolve.body,toastOptions);
+          toast.error("No bookings found for entered Booking id or Mobile NUmber",toastOptions);
         }
       }).catch((error)=>{
         toast.error(error + " Please Try again later!..", toastOptions);

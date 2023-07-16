@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import validator from "validator";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import useRazorpay from "react-razorpay";
 
 export default function BookingConfirmation() {
+  const [Razorpay] = useRazorpay();
   const locationSate = useLocation().state;
   const [origin] = useState(
     locationSate.locationstate.locationState.locationState.origin
@@ -35,7 +37,12 @@ export default function BookingConfirmation() {
   const [email, setEmail] = useState("");
   const [mobile, setMobile] = useState("");
   const [booking_id, setBookingId] = useState(undefined);
-  const Navigate = useNavigate("");
+  const [razorpay_payment_id, set_razorpay_payment_id] = useState("");
+  const [razorpay_order_id, set_razorpay_order_id] = useState("");
+  const [razorpay_signature, set_razorpay_signature] = useState("");
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [readOnly, setReadOnly] = useState();
+  const [displayBookingId, setDisplayBookingId] = useState(false);
   const toastOptions = {
     position: "bottom-right",
     autoClose: 6500,
@@ -43,6 +50,8 @@ export default function BookingConfirmation() {
     draggable: true,
     theme: "dark",
   };
+
+  console.log(razorpay_order_id,razorpay_payment_id,razorpay_signature);
 
   const payment = () => {
     if (handleValidation()) {
@@ -55,34 +64,144 @@ export default function BookingConfirmation() {
         arrivalDate: arrivalDate,
         origin: origin,
         destinantion: destination,
-        passengers:passenger,
+        passengers: passenger,
         busType: type,
         totalPrice: totalPrice,
         status: "Pending",
       };
-      fetch(`http://localhost:8080/auth/api/savebooking`,{
+      fetch(`http://localhost:8080/auth/api/savebooking`, {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
           "Access-Control-Allow-Origin": "http://localhost:3000",
         },
-        body:JSON.stringify({bookings,customer,passenger,seat:selectedSeats})
-      }).then((resolve)=>{
-        if(resolve.status===200){
-          resolve.json().then((result)=>{
-            setBookingId(result);
-            console.log(result)
-          }).catch((error)=>{
-            toast.error(error + " Please try again later...", toastOptions);
-          })
-        }else{
-          toast.error("Failed saving data!! Please try again later...", toastOptions);
-        }
-      }).catch((error)=>{
-        toast.error(error + " Please try again later...", toastOptions);
+        body: JSON.stringify({
+          bookings,
+          customer,
+          passenger,
+          seat: selectedSeats,
+        }),
       })
+        .then((resolve) => {
+          if (resolve.status === 200) {
+            resolve
+              .json()
+              .then((result) => {
+                console.log("Bookings saved");
+                fetchOrder(result);
+              })
+              .catch((error) => {
+                console.log(error);
+                toast.error(error + " Please try again later...", toastOptions);
+              });
+          } else {
+            toast.error(
+              "Failed saving data!! Please try again later...",
+              toastOptions
+            );
+          }
+        })
+        .catch((error) => {
+          toast.error(error + " Please try again later...", toastOptions);
+        });
     }
+  };
+
+  const handlePaymentFailure = () => {
+    console.log("Payment failed");
+    toast.error("Sorry!! Payment Failed ", toastOptions);
+  };
+
+  const fetchOrder = (data) => {
+    const options = {
+      key: "rzp_test_PFH56BsCj9Z0Ty", // Enter the Key ID generated from the Dashboard
+      amount: totalPrice, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      currency: "INR",
+      name: "CHALO YATRI",
+      description: "Booking Payment",
+      order_id: data.id,
+      handler: function (response) {
+        set_razorpay_order_id(response.razorpay_payment_id);
+        set_razorpay_payment_id(response.razorpay_order_id);
+        set_razorpay_signature(response.razorpay_signature);
+        updatePaymentOnServer(
+          response.razorpay_payment_id,
+          response.razorpay_order_id,
+          response.razorpay_signature
+        );
+      },
+      modal: {
+        ondismiss: handlePaymentFailure,
+      },
+      prefill: {
+        name: "Ankit",
+        email: "ankit2003nashine@gmail.com",
+        contact: "8602185525",
+      },
+      notes: {
+        address: "UBUNFAKN",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+
+    let razorpay = new Razorpay(options);
+    razorpay.open();
+  };
+
+  const updatePaymentOnServer = (
+    razorpay_payment_id,
+    razorpay_order_id,
+    razorpay_signature
+  ) => {
+    console.log("Updating payment");
+    console.log(razorpay_payment_id, razorpay_order_id, razorpay_signature);
+    fetch(`http://localhost:8080/auth/api/paymentupdate`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "http://localhost:3000",
+      },
+      body: JSON.stringify({
+        razorpay_order_id,
+        razorpay_payment_id,
+        razorpay_signature,
+        paymentStatus: "paid",
+      }),
+    })
+      .then((resolve) => {
+        if (resolve.status === 200) {
+          resolve
+            .json()
+            .then((result) => {
+              console.log("Booking_id: " + result);
+              setBookingId(result);
+              setReadOnly(true);
+              setPaymentSuccess(true);
+              setDisplayBookingId(true);
+              toast.success(
+                "Payment Successful.... Enjoy your trip",
+                toastOptions
+              );
+            })
+            .catch((error) => {
+              toast.error(
+                "Error saving data!! You dont worry we will update ou soon"
+              );
+            });
+        }
+      })
+      .catch((error) => {
+        toast.error(
+          "Error saving data!! You dont worry we will update ou soon"
+        );
+      });
+    console.log(razorpay_order_id);
+    console.log(razorpay_payment_id);
+    console.log(razorpay_signature);
   };
 
   const handleValidation = () => {
@@ -100,6 +219,11 @@ export default function BookingConfirmation() {
   return (
     <div className="col-md-8 offset-md-2 booking-div">
       <div className="card">
+        {displayBookingId === true ? (
+          <div className="card-title mt-4">
+            <h1>Bus-Ticket</h1>
+          </div>
+        ) : null}
         <div className="card-body">
           <div className="row">
             <div className="col mr-5 mt-3">
@@ -169,6 +293,11 @@ export default function BookingConfirmation() {
               </h5>
             </div>
           </div>
+          {displayBookingId === true ? (
+            <div className="container mt-3">
+              <h2>Booking id: <strong>{booking_id}</strong></h2>
+            </div>
+          ) : null}
           <div className="container mt-4">
             <h2>
               <strong>Bus Details</strong>
@@ -217,7 +346,7 @@ export default function BookingConfirmation() {
                     <td>{item.age}</td>
                     <td>{item.gender}</td>
                     <td>{selectedSeats[i]}</td>
-                    <td>Rs.{totalPrice / selectedSeats.length}</td>
+                    <td>Rs.{totalPrice}</td>
                   </tr>
                 ))}
               </tbody>
@@ -226,7 +355,7 @@ export default function BookingConfirmation() {
               <h3>
                 Total Fare:{" "}
                 <strong>
-                  <i>Rs.{totalPrice}</i>
+                  <i>Rs.{totalPrice*passenger.length}</i>
                 </strong>
               </h3>
             </div>
@@ -244,6 +373,7 @@ export default function BookingConfirmation() {
                   value={customer_name}
                   className="mr-4 ml-2"
                   type="text"
+                  readOnly={readOnly}
                   name="name"
                   id="name"
                   placeholder="Please enter your name"
@@ -256,6 +386,7 @@ export default function BookingConfirmation() {
                   value={email}
                   className="ml-2"
                   type="email"
+                  readOnly={readOnly}
                   name="email"
                   id="email"
                   placeholder="Please enter your email"
@@ -268,6 +399,7 @@ export default function BookingConfirmation() {
                   value={mobile}
                   className="ml-2"
                   type="text"
+                  readOnly={readOnly}
                   name="mobile"
                   id="mobile"
                   placeholder="Please enter your mobile no."
@@ -275,12 +407,18 @@ export default function BookingConfirmation() {
               </div>
             </div>
           </div>
-          <div className="d-inline">
-            <button className="btn btn-danger btn-lg mt-3 mr-3">Cancel</button>
-            <button onClick={payment} className="btn btn-success btn-lg mt-3">
-              Proceed to pay
-            </button>
-          </div>
+          {paymentSuccess === false ? (
+            <div className="d-inline">
+              <button onClick={payment} className="btn btn-success btn-lg mt-3">
+                Proceed to pay
+              </button>
+            </div>
+          ) : (
+            <div className="d-flex offset-md-4">
+              <i className="fa-solid fa-check fa-2x"></i>
+              <h3>Enjoy your trip....</h3>
+            </div>
+          )}
         </div>
       </div>
       <ToastContainer />

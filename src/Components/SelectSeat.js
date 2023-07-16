@@ -50,10 +50,7 @@ export default function SelectSeat() {
               );
             });
         } else {
-          toast.error(
-            "Cannot fetch seats latest update...Something went wrong from our end!! Please try later",
-            toastOptions
-          );
+          unavailableSeat.push(0);
         }
       })
       .catch((error) => {
@@ -132,8 +129,8 @@ export default function SelectSeat() {
       fourthRow.push(i + 2 + Math.floor(capacity / 4) * 3);
       setFirstRow(firstRow.slice(0, Math.ceil(capacity / 4)));
       setSecondRow(secondRow.slice(0, Math.ceil(capacity / 4)));
-      setThirdRow(thirdRow.slice(0, Math.ceil(capacity / 4)));
-      setFourthRow(fourthRow.slice(0, Math.ceil(capacity / 4)));
+      setThirdRow(thirdRow.slice(0, Math.ceil(capacity / 4)-1));
+      setFourthRow(fourthRow.slice(0, Math.ceil(capacity / 4)-1));
     }
     // eslint-disable-next-line
   }, []);
@@ -174,7 +171,7 @@ export default function SelectSeat() {
           <br />
           <br />
           <div className="table-responsive">
-            <div className="col-md-6 offset-md-3">
+            <div className="col-md-6 offset-md-1">
               <ul className="d-flex text-white">
                 {firstRow.map((item) =>
                   unavailableSeat.includes(item) === false ? (

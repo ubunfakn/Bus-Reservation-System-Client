@@ -31,6 +31,7 @@ import SearchBus from "./Components/SearchBus";
 import AddPassengers from "./Components/AddPassengers";
 import SelectSeat from './Components/SelectSeat';
 import BookingConfirmation from "./Components/BookingConfirmation";
+import Ticket from "./Components/Ticket.js";
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -79,6 +80,7 @@ function App() {
           <Route path="/addpass" element={<AddPassengers />} />
           <Route path="/selectseat" element={<SelectSeat />} />
           <Route path="/bookingconfirmation" element={<BookingConfirmation />}/>
+          <Route path="/ticket" element={<Ticket />} />
         </Routes>
         {isAdmin === true ? (
           <Routes>

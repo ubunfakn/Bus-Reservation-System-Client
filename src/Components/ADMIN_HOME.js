@@ -36,7 +36,7 @@ export default function ADMIN_HOME() {
   useEffect(()=>{
     fetchCounts();
      // eslint-disable-next-line
-  },[])
+  })
   return (
     <div className="col-md-10 offset-md-1">
       <div className="card">

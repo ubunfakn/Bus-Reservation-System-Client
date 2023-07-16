@@ -50,14 +50,7 @@ export default function SignUp() {
             .json()
             .then((resultJson) => {
               if (resolve.status === 200) {
-                console.log(resultJson);
-                localStorage.setItem("bus-reservation-system-user", resultJson);
-                localStorage.setItem(
-                  "bus-reservation-system-token",
-                  resultJson.token
-                );
-                if (resultJson.role === "ROLE_ADMIN") Navigate("/admin");
-                else if (resultJson.role === "ROLE_USER") Navigate("/user");
+                Navigate("/login");
               } else {
                 toast.error(resultJson.message, toastOptions);
               }
@@ -115,7 +108,7 @@ export default function SignUp() {
         Navigate("/user");
     }
     // eslint-disable-next-line
-  }, []);
+  });
 
   return (
     <div>
