@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/static/css/main.6f67080b.css",
-    "main.js": "/static/js/main.9f679a18.js",
-    "static/js/787.a408104b.chunk.js": "/static/js/787.a408104b.chunk.js",
-    "static/media/volvo-9600.avif": "/static/media/volvo-9600.0eda5dfdccc24cd78f99.avif",
-    "index.html": "/index.html",
-    "main.6f67080b.css.map": "/static/css/main.6f67080b.css.map",
-    "main.9f679a18.js.map": "/static/js/main.9f679a18.js.map",
-    "787.a408104b.chunk.js.map": "/static/js/787.a408104b.chunk.js.map"
+    "main.css": "/Bus-Reservation-System-Client/static/css/main.5cb54185.css",
+    "main.js": "/Bus-Reservation-System-Client/static/js/main.477e2636.js",
+    "static/js/787.a408104b.chunk.js": "/Bus-Reservation-System-Client/static/js/787.a408104b.chunk.js",
+    "static/media/volvo-9600.avif": "/Bus-Reservation-System-Client/static/media/volvo-9600.0eda5dfdccc24cd78f99.avif",
+    "index.html": "/Bus-Reservation-System-Client/index.html",
+    "main.5cb54185.css.map": "/Bus-Reservation-System-Client/static/css/main.5cb54185.css.map",
+    "main.477e2636.js.map": "/Bus-Reservation-System-Client/static/js/main.477e2636.js.map",
+    "787.a408104b.chunk.js.map": "/Bus-Reservation-System-Client/static/js/787.a408104b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.6f67080b.css",
-    "static/js/main.9f679a18.js"
+    "static/css/main.5cb54185.css",
+    "static/js/main.477e2636.js"
   ]
 }
