@@ -50,7 +50,7 @@ export default function Login() {
               resultJson.role
             );
             if (resultJson.role === "ROLE_ADMIN") Navigate("/admin");
-            else if (resultJson.role === "ROLE_USER") Navigate("/user");
+            else if (resultJson.role === "ROLE_USER") Navigate("/profile");
           }).catch((error)=>{
             toast.error(error + " Please try again later...", toastOptions);
           });
@@ -83,7 +83,7 @@ export default function Login() {
       else if (
         localStorage.getItem("bus-reservation-system-role") === "ROLE_USER"
       )
-        Navigate("/user");
+        Navigate("/profile");
     }
     // eslint-disable-next-line
   },[]);

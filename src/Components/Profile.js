@@ -137,6 +137,7 @@ export default function Profile() {
 
   useEffect(() => {
     fetchUser();
+    console.log("***djfhdgjnhikhi")
     // eslint-disable-next-line
   }, []);
 

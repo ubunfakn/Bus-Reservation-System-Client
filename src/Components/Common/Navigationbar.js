@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 export default function Navigationbar() {
   const [show, setShow] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isUser, setIsUser] = useState(false);
   const [name, setName] = useState("");
   const Navigate = useNavigate("");
   const toastOptions = {
@@ -70,8 +71,16 @@ export default function Navigationbar() {
 
     if (localStorage.getItem("bus-reservation-system-role") === "ROLE_ADMIN") {
       setIsAdmin(true);
+      setIsUser(false);
     } else {
       setIsAdmin(false);
+    }
+
+    if(localStorage.getItem("bus-reservation-system-role") === "ROLE_USER"){
+      setIsUser(true);
+      setIsAdmin(false);
+    }else{
+      setIsUser(false);
     }
   });
   return (
@@ -127,6 +136,13 @@ export default function Navigationbar() {
                 Add-Route
               </NavLink>
             )}
+          </li>
+          <li className="nav-item ml-3">
+            {isUser === true?(
+              <NavLink className="nav-link" to={"/bookings"}>
+                My-Bookings
+              </NavLink>
+            ):null}
           </li>
           <li className="nav-item ml-3">
             {show === true ? (

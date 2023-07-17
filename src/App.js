@@ -49,11 +49,12 @@ function App() {
         setIsAdmin(true);
         setIsUser(false);
       } else if (
-        localStorage.getItem("bus-reservation-system-role" === "ROLE_USER")
+        localStorage.getItem("bus-reservation-system-role") === "ROLE_USER"
       ) {
         setIsAdmin(false);
         setIsUser(true);
       }
+      console.log(isUser,isAdmin + "*******************")
     }
   });
   return (
@@ -97,7 +98,8 @@ function App() {
         ) : null}
         {isUser === true?(
           <Routes>
-            <Route path="/user"/>
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/bookings" element={<Bookings />} />
           </Routes>
         ):null}
         <Footer />
