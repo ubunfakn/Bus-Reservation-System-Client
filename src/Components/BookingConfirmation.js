@@ -115,7 +115,7 @@ export default function BookingConfirmation() {
 
   const fetchOrder = (data) => {
     const options = {
-      key: "rzp_test_PFH56BsCj9Z0Ty", // Enter the Key ID generated from the Dashboard
+      key: "rzp_test_5SKZYSprPJkNCr", // Enter the Key ID generated from the Dashboard
       amount: totalPrice, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
       currency: "INR",
       name: "CHALO YATRI",
